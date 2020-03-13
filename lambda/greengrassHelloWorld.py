@@ -8,8 +8,6 @@ from threading import Thread
 import mo
 from playsound import playsound
 
-global detected = ""
-
 client = greengrasssdk.client("iot-data")
 
 iotTopic = "$aws/things/{}/infer".format(os.environ["AWS_IOT_THING_NAME"])
@@ -20,7 +18,7 @@ def greengrass_infinite_infer_run():
         model_name = "image-classification"
         input_width = 224
         input_height = 224
-        max_threshold = 0.75
+        max_threshold = 0.60
         error, model_path = mo.optimize(model_name,input_width,input_height)
         outMap = { 0: "a", 1: "b", 2: "c", 3: "d", 4: "e", 5: "f", 6: "g", 7 : "h", 8 : "i", 9 : "k", 10 : "l", 11 : "m", 12 : "n", 13 : "o", 14 : "p", 15 : "q", 16 : "r", 17 : "s", 18 : "t", 19 : "u", 20 : "v", 21 : "w", 22 : "x", 23 : "y", 24 : "z" }
         client.publish(topic=iotTopic, payload="Object detection starts now")
@@ -38,8 +36,9 @@ def greengrass_infinite_infer_run():
             # Raise an exception if failing to get a frame
             if ret == False:
                 raise Exception("Failed to get frame from the stream")
-
-	        margin = (frame.shape[1] - frame.shape[0]) / 2
+            global margin
+            detected = ""
+            margin = (frame.shape[1] - frame.shape[0]) / 2
             cropped = frame[0:frame.shape[0], margin:frame.shape[1] - margin]
             frameResize = cv2.resize(cropped, (input_width, input_height))
             inferOutput = model.doInference(frameResize)
@@ -47,9 +46,10 @@ def greengrass_infinite_infer_run():
             client.publish(topic=iotTopic, payload = str(parsed_results))
             for obj in parsed_results:
                 if obj["prob"] > max_threshold and detected != outMap[obj["label"]]:
-		            detected = outMap[obj["label"]]
+                    detected = outMap[obj["label"]]
                     client.publish(topic=iotTopic, payload = outMap[obj["label"]])
-		    playsound("../letters/" + outMap[obj["label"]] + ".mp3");
+                    playsound('/opt/awscam/artifacts/' + outMap[obj["label"]] + '.mp3')
+                    time.sleep(1)
 
     except Exception as e:
         msg = "Test failed: " + str(e)
