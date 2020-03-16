@@ -74,8 +74,9 @@ wheel (0.29.0)
 - There used to be a greengrass hello world Lambda example which was removed.
 - You need to author a new lambda.
 - Copy all contents of the Lambda folder into files such as `greengrassHelloWorld.py`, and the various other folders and files.
+- Remove `lambda_function.py`. The handler needs to be `greengrassHelloWorld.function_handler`.
 - The lambda needs a service role.
-- The lambda needs to be published.
+- The lambda needs to be published as a version.
 - The lambda must start with `deeplens`.
 
 ## Upload DeepLens Model
@@ -98,7 +99,7 @@ wheel (0.29.0)
 
 ## Deploy DeepLens Project to Device
 
-- Go to the DeepLens Projects dashboard. 
+- Go to the DeepLens Projects dashboard.
 - Select your Project and click the `Deploy to Device` button.
 - Select the correct device, select `Review`, then select `Deploy`.
 
