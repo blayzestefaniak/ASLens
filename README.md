@@ -28,8 +28,6 @@ graphviz (0.8.4)
 gyp (0.1)
 idna (2.6)
 jmespath (0.9.5)
-mpg123 (0.4)
-mpyg321 (0.0.2)
 mxnet (1.3.0)
 mxnet-mkl (0.12.0)
 numpy (1.11.0)
@@ -53,18 +51,26 @@ wheel (0.29.0)
 
 ## Lambda
 
-There used to be a greengrass hello world Lambda example which was removed. You need to create a new lambda which starts with `deeplens` and copy the contents of the Lambda folder into files such as greengrassHelloWorld.py.
+- There used to be a greengrass hello world Lambda example which was removed.
+- You need to author a new lambda.
+- Copy all contents of the Lambda folder into files such as greengrassHelloWorld.py, and the various other folders and files.
+- The lambda needs a service role.
+- The lambda needs to be published.
+- The lambda must start with `deeplens`.
 
 ## MP3 Files
 
-Once the project is synced with DeepLens device, copy contents of letters directory to artifacts directory.
+- Once the project is synced with DeepLens device, copy contents of letters directory to artifacts directory.
 
 ## Sound Modules
 
+### Credit
+
+- Thanks to these folks for great instructions, but providing them below as well to remove dependencies.
 - `https://forums.aws.amazon.com/thread.jspa?messageID=826041&#826041`
 - `https://github.com/matthew1000/dee`
 
-### Steps to get Playsound working On DeepLens 
+### Steps to get Playsound working On DeepLens
 
 - On the DeepLens device, open /opt/awscam/greengrass/ggc/deployment/group/group.json
 - Find the section containing `/dev/dri/renderD128`
